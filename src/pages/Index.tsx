@@ -1,41 +1,15 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Index() {
-  const [email, setEmail] = useState('');
   const [showCode, setShowCode] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const validateEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  const handleGetCode = async () => {
-    if (!validateEmail(email)) {
-      toast({
-        title: "Неверный email",
-        description: "Пожалуйста, введите корректный email адрес",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    
-    // Имитация отправки
-    setTimeout(() => {
-      setShowCode(true);
-      setIsLoading(false);
-      toast({
-        title: "Код отправлен!",
-        description: `Код отправлен на ${email}`,
-      });
-    }, 1500);
+  const handleGetCode = () => {
+    setShowCode(true);
   };
 
   const handleCopyCode = () => {
@@ -58,7 +32,7 @@ export default function Index() {
             Windows CFMOT
           </h1>
           <p className="text-slate-600 text-lg">
-            Получите код активации на свой email
+            Получите код активации одним нажатием
           </p>
         </div>
 
@@ -66,38 +40,23 @@ export default function Index() {
         <Card className="border-0 shadow-xl shadow-sky-100/50 hover-scale">
           <CardContent className="p-8 space-y-6">
             {!showCode ? (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-slate-700 block">
-                    Email адрес
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleGetCode()}
-                    className="h-12 text-base"
-                  />
+              <div className="text-center space-y-6">
+                <div className="space-y-3">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-sky-50 rounded-full">
+                    <Icon name="Lock" size={40} className="text-sky-500" />
+                  </div>
+                  <p className="text-slate-600">
+                    Нажмите кнопку, чтобы получить<br />код активации Windows CFMOT
+                  </p>
                 </div>
                 
                 <Button 
                   onClick={handleGetCode}
-                  disabled={isLoading}
-                  className="w-full h-12 text-base font-medium bg-sky-500 hover:bg-sky-600"
+                  size="lg"
+                  className="w-full h-14 text-lg font-medium bg-sky-500 hover:bg-sky-600"
                 >
-                  {isLoading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Отправка...
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Icon name="Send" size={18} />
-                      Получить код
-                    </div>
-                  )}
+                  <Icon name="Key" size={20} className="mr-2" />
+                  Получить код
                 </Button>
               </div>
             ) : (
@@ -110,7 +69,7 @@ export default function Index() {
                     Код активации
                   </h2>
                   <p className="text-slate-600">
-                    Код отправлен на {email}
+                    Используйте этот код для активации
                   </p>
                 </div>
 
@@ -135,15 +94,12 @@ export default function Index() {
                     Скопировать
                   </Button>
                   <Button
-                    onClick={() => {
-                      setShowCode(false);
-                      setEmail('');
-                    }}
+                    onClick={() => setShowCode(false)}
                     variant="outline"
                     className="flex-1 h-11"
                   >
                     <Icon name="RotateCcw" size={16} className="mr-2" />
-                    Новый запрос
+                    Скрыть код
                   </Button>
                 </div>
               </div>
@@ -155,7 +111,7 @@ export default function Index() {
         <div className="text-center space-y-2 px-4">
           <div className="flex items-center justify-center gap-2 text-slate-500 text-sm">
             <Icon name="Shield" size={16} />
-            <span>Безопасная передача данных</span>
+            <span>Безопасное получение кода</span>
           </div>
           <p className="text-xs text-slate-400">
             Код действителен для активации Windows CFMOT
